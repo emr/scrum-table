@@ -1,0 +1,12 @@
+.Login {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.Login > div {
+    width: 100%;
+    max-width: 350px;
+}
