@@ -36,8 +36,21 @@ class App extends Component {
         });
         this.listsDbRef
             .on('value', snap => {
+                // normalize
+                const lists = Object.keys(snap.val()).reduce(
+                    (lists, key) => {
+                        lists[key] = {
+                            items: [],
+                            title: 'Untitled',
+                            ...lists[key]
+                        }
+                        return lists;
+                    },
+                    snap.val()
+                );
+
                 this.setState({
-                    lists: snap.val(),
+                    lists,
                     fetching: false,
                 });
                 this.lockSave();
