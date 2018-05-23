@@ -3,4 +3,4 @@ demo: [https://scrum-table.demo.emreakinci.me](https://scrum-table.demo.emreakin
 
 ### yapılacaklar
 * [x] #1 bug çözülecek.
-* [ ] info menüsü eklenecek.
+* [x] info menüsü eklenecek.

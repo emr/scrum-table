@@ -1,9 +1,13 @@
 export const app = {
     name: 'Scrum Table',
     info: {
-        links: {
-            github: 'https://github.com/emr/scrum-table',
-        },
+        links: [
+            {
+                icon: 'git-repo',
+                text: 'Github',
+                link: 'https://github.com/emr/scrum-table',
+            }
+        ],
     },
 };
 

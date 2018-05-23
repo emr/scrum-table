@@ -1,7 +1,7 @@
 import React from 'react'
 import { app } from '../config';
 import {
-    Classes, Alignment,
+    Classes, Alignment, Position,
     Navbar, NavbarGroup, NavbarHeading, NavbarDivider,
     Popover, Menu, MenuItem,
     Button, Icon,
@@ -17,7 +17,23 @@ export default class AppNavbar extends React.Component {
                 </NavbarGroup>
                 <NavbarGroup align={Alignment.RIGHT}>
                     <NavbarDivider/>
-                    <Button minimal={true} icon="info-sign" />
+                    <Popover
+                        minimal={true}
+                        position={Position.BOTTOM}
+                        content={
+                            <Menu>
+                                {
+                                    app.info.links.map(item => (
+                                        <a href={item.link} style={{color: 'inherit'}} target="_blank">
+                                            <MenuItem text={item.text} labelElement={<Icon icon={item.icon}/>} />
+                                        </a>
+                                    ))
+                                }
+                            </Menu>
+                        }
+                    >
+                        <Button minimal={true} icon="info-sign" />
+                    </Popover>
                 </NavbarGroup>
                 <NavbarGroup align={Alignment.RIGHT}>
                     <NavbarDivider/>
