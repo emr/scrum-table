@@ -23,8 +23,13 @@ export default class AppNavbar extends React.Component {
                         content={
                             <Menu>
                                 {
-                                    app.info.links.map(item => (
-                                        <a href={item.link} style={{color: 'inherit'}} target="_blank">
+                                    app.info.links.map((item, i) => (
+                                        <a
+                                            key={i}
+                                            href={item.link}
+                                            style={{ color: 'inherit '}}
+                                            target="_blank"
+                                        >
                                             <MenuItem text={item.text} labelElement={<Icon icon={item.icon}/>} />
                                         </a>
                                     ))

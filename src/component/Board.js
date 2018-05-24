@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
-import firebase from '../firebase';
-import {List, LoadingList} from './List';
+import { TaskList, LoadingList } from './TaskList';
+import StoryList from './StoryList';
 import { NonIdealState } from '@blueprintjs/core';
 import './Board.css';
 
@@ -9,8 +9,9 @@ export default class Board extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
+            selectedStory: 0,
         };
-    };
+    }
 
     reorder = (list, startIndex, endIndex) => {
         const result = Array.from(list);
@@ -18,7 +19,7 @@ export default class Board extends Component {
         result.splice(endIndex, 0, removed);
     
         return result;
-    };
+    }
 
     move = (source, destination, droppableSource, droppableDestination) => {
         const sourceClone = Array.from(source);
@@ -32,7 +33,7 @@ export default class Board extends Component {
         result[droppableDestination.droppableId] = destClone;
     
         return result;
-    };
+    }
 
     onDragEnd = result => {
         const { source, destination } = result;
@@ -66,46 +67,62 @@ export default class Board extends Component {
 
             this.forceUpdate();
         }
-    };
+    }
 
     renderLists() {
-        const lists = Object.entries(this.props.lists);
+        if (0 === this.props.stories.length)
+            return;
 
-        if (0 === lists.length) {
-            return <NonIdealState
-                description="Görüntülenecek veri yok."
-                visual="clipboard"
-            />;
-        }
-        
+        const lists = Object.entries(this.props.lists);
+        const { selectedStory } = this.state;
+
         return <DragDropContext onDragEnd={this.onDragEnd}>
         {
             lists.map(list => (
-                <List
+                <TaskList
                     id={list[0]}
                     key={list[0]}
+                    story={selectedStory}
                     title={list[1].title}
-                    items={list[1].items}
+                    items={list[1].items.filter(item => item.story === selectedStory)}
                     width={300}
                 />
             ))
         }
         </DragDropContext>;
-    };
+    }
+    
+    handleStoryChange = (selected) => {
+        this.setState({
+            selectedStory: parseInt(selected.split('story-')[1])
+        });
+    }
 
     render() {
-        const { lists, fetching } = this.props;
+        const lists = Object.entries(this.props.lists);
+        const { fetching, stories } = this.props;
         return (
             <div className="Board">
                 {
-                    fetching ? (
-                        <LoadingList length={3} />
-                    ) : (
-                        this.renderLists()
+                    fetching ? <LoadingList length={3} />
+                    : (
+                        lists.length > 0 ?
+                        [
+                            <StoryList
+                                onChange={this.handleStoryChange}
+                                stories={stories}
+                                selected={this.state.selectedStory}
+                            />,
+                            this.renderLists()
+                        ]
+                        :
+                        <NonIdealState
+                            description="Görüntülenecek veri yok."
+                            visual="clipboard"
+                        />
                     )
                 }
-                
             </div>
         );
-    };
+    }
 }

@@ -1,14 +1,29 @@
 .Board {
+    display: -webkit-flex;
+    display: -ms-flexbox;
     display: flex;
-    justify-content: space-around;
+    -webkit-justify-content: center;
+    -ms-justify-content: center;
+    justify-content: center;
+    -webkit-align-items: top;
+    -ms-align-items: top;
+    align-items: top;
 }
 
-.Board > .List {
-    margin: 20px;
-    padding: 0 0 20px;
+.Board > .TaskList {
+    margin: 10px;
     width: 350px;
 }
 
-.Board > .List .Note {
-    padding: 20px 20px 0;
+.Board > .TaskList .TaskList-Body {
+    padding: 10px;
+}
+
+.Board > .TaskList .Task {
+    padding: 10px;
+}
+
+.Board > .Stories {
+    width: 350px;
+    margin: 10px;
 }

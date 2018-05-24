@@ -1,0 +1,41 @@
+.Task {
+    position: relative;
+}
+.Task-Title {
+    font-weight: bold;
+    border-bottom: 1px solid rgba(0, 0, 0, .1);
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+.Task .Task-Tools {
+    -moz-transition: opacity .2s;
+    -webkit-transition: opacity .2s;
+    -ms-transition: opacity .2s;
+    -o-transition: opacity .2s;
+    transition: opacity .2s;
+    opacity: 0;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+    border-radius: 3px;
+
+    text-align: center;
+
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-justify-content: center;
+    -ms-justify-content: center;
+    justify-content: center;
+    -webkit-align-items: center;
+    -ms-align-items: center;
+    align-items: center;
+}
+.Task:hover .Task-Tools {
+    opacity: 1;
+}

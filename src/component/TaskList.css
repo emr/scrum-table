@@ -1,10 +1,8 @@
-.List {
+.TaskList {
     height: 100%;
-    background: #F5F8FA;
-    border-radius: 3px;
 }
 
-.List-Head {
+.TaskList-Head {
     position: -webkit-sticky;
     position: sticky;
     top: 0;
@@ -12,4 +10,15 @@
     margin: 0;
     background: #EBF1F5;
     border-bottom: 1px solid rgba(0, 0, 0, .1);
+}
+
+.TaskList-Body {
+    height: 100%;
+    background: #F5F8FA;
+    border-radius: 3px;
+}
+
+.TaskList-Drag-Container {
+    height: 100%;
+    min-height: 60px;
 }

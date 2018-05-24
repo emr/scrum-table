@@ -17,6 +17,7 @@ class App extends Component {
                 email: '',
                 password: '',
             },
+            stories: [],
             lists: [],
             saving: false,
             saved: true,
@@ -25,6 +26,7 @@ class App extends Component {
         this.toaster = new Toaster();
         this.auth = firebase.auth();
         this.listsDbRef = firebase.database().ref().child('lists');
+        this.storiesDbRef = firebase.database().ref().child('stories');
     }
     componentDidMount() {
         this.auth.onAuthStateChanged(user => {
@@ -34,28 +36,52 @@ class App extends Component {
                 userProfile: user,
             })
         });
-        this.listsDbRef
-            .on('value', snap => {
-                // normalize
-                const lists = Object.keys(snap.val()).reduce(
-                    (lists, key) => {
-                        lists[key] = {
-                            items: [],
-                            title: 'Untitled',
-                            ...lists[key]
-                        }
-                        return lists;
-                    },
-                    snap.val()
-                );
+        Promise.all([
+            new Promise(resolve => {
+                this.listsDbRef
+                    .on('value', snap => {
+                        // normalize
+                        const lists = Object.keys(snap.val()).reduce(
+                            (lists, key) => {
+                                lists[key] = {
+                                    title: 'Untitled',
+                                    ...lists[key],
+                                    // items object to array
+                                    // and push id from object key
+                                    items: lists[key].items ? Object.entries(lists[key].items).map(i => ({id: i[0], ...i[1]})) : [],
+                                }
+                                return lists;
+                            },
+                            snap.val()
+                        );
+        
+                        this.setState({
+                            lists,
+                        });
+                        resolve();
+                    })
+                ;
+            }),
+            new Promise(resolve => {
+                this.storiesDbRef
+                    .on('value', snap => {
+                        // normalize
+                        const stories = Object.entries(snap.val() || []).map(i => ({id: i[0], ...i[1]}));
 
-                this.setState({
-                    lists,
-                    fetching: false,
-                });
-                this.lockSave();
+                        this.setState({
+                            stories,
+                        });
+                        resolve();
+                    })
+                ;
             })
-        ;
+        ])
+        .then(() => {
+            this.setState({
+                fetching: false
+            })
+            this.lockSave();
+        });
     }
     signIn = (data) => {
         this.setState({isSigningIn: true});
@@ -101,21 +127,34 @@ class App extends Component {
         this.auth.signOut();
     }
     synchronize = () => {
-        this.listsDbRef
-            .set(this.state.lists)
-            .then(() => this.lockSave())
-            .catch(e => {
-                this.toaster.show({
-                    intent: Intent.DANGER,
-                    message: e.message,
-                });
-            })
-        ;
+        this.setSaving();
+        Promise.all([
+            new Promise(resolve => {
+                this.listsDbRef
+                    .set(this.state.lists)
+                    .then(resolve)
+                ;
+            }),
+            new Promise(resolve => {
+                this.storiesDbRef
+                    .set(this.state.stories)
+                    .then(resolve)
+                ;
+            }),
+        ])
+        .then(() => this.lockSave())
+        .catch(e => {
+            this.toaster.show({
+                intent: Intent.DANGER,
+                message: e.message,
+            });
+        });
     }
-    lockSave = () => this.setState({saved: true});
-    unlockSave = () => this.setState({saved: false});
+    setSaving = () => this.setState({ saving: true, saved: false, });
+    lockSave = () => this.setState({ saving: false, saved: true, });
+    unlockSave = () => this.setState({ saving: false, saved: false, });
     render() {
-        const { isSignedIn, isSigningIn, loginData, lists, saving, saved, fetching, } = this.state;
+        const { isSignedIn, isSigningIn, loginData, stories, lists, saving, saved, fetching, } = this.state;
         return (
             <div className="App">
                 <Toaster ref={(ref) => this.toaster = ref} />
@@ -131,7 +170,7 @@ class App extends Component {
                             <div className="container">
                                 <Board
                                     unlockSave={this.unlockSave}
-                                    {...{fetching, lists}}
+                                    {...{fetching, stories, lists}}
                                 />
                             </div>
                         </div>

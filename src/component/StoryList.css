@@ -1,0 +1,52 @@
+.Stories {
+    padding: 0 0 20px;
+    background: #F5F8FA;
+}
+
+.Stories > .Stories-Head {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    padding: 20px;
+    margin: 0;
+    background: #EBF1F5;
+    border-bottom: 1px solid rgba(0, 0, 0, .1);
+}
+
+.Stories .Story-Tabs,
+.Stories .Story-Tab,
+.pt-tab-list,
+.pt-tab-indicator-wrapper {
+    width: calc(100% - 30px);
+}
+
+.Stories .Story-Tab {
+    margin: 15px 15px 0 !important;
+    padding: 15px !important;
+    color: inherit !important;
+}
+
+.Stories .Story-Tab:hover {
+    background: rgba(206, 217, 224, .3);
+    border-radius: 3px;
+}
+
+.Story-Tab .Story-Tab-Tools {
+    -moz-transition: opacity .2s;
+    -webkit-transition: opacity .2s;
+    -ms-transition: opacity .2s;
+    -o-transition: opacity .2s;
+    transition: opacity .2s;
+    opacity: 0;
+    position: absolute;
+    top: 7px;
+    right: 7px;
+    bottom: 7px;
+    left: 7px;
+    border-radius: 3px;
+
+    text-align: right;
+}
+.Story-Tab .Story-Tab-Tools:hover {
+    opacity: 1;
+}
