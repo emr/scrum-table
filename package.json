@@ -1,19 +1,15 @@
 {
   "name": "proje_yy",
-  "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@blueprintjs/core": "^2.3.1",
     "@blueprintjs/datetime": "^2.0.3",
     "firebase": "^5.0.3",
     "immutability-helper": "^2.7.0",
-    "moment": "^2.22.1",
     "normalize.css": "^8.0.0",
     "prop-types": "^15.6.1",
     "react": "^16.3.2",
     "react-beautiful-dnd": "^7.1.3",
-    "react-dnd": "^2.6.0",
-    "react-dnd-html5-backend": "^2.6.0",
     "react-dom": "^16.3.2",
     "react-scripts": "1.1.4",
     "react-transition-group": "^2.3.1"
