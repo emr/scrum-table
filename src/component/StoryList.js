@@ -1,23 +1,33 @@
 import React from 'react';
 import firebase from '../firebase';
-import { Intent, Tabs, Tab, ButtonGroup, Button } from '@blueprintjs/core';
+import {
+    Intent,
+    Alert,
+    Tabs, Tab,
+    ButtonGroup, Button,
+} from '@blueprintjs/core';
 import StoryForm from './StoryForm';
 import './StoryList.css';
 
 export default class StoryList extends React.Component {
     constructor(props, context) {
         super(props, context);
+        this.state = {
+            deletionConfirm: false,
+        };
         this.storiesDbRef = firebase.database().ref('stories');
     }
     deleteStory = story => {
         this.storiesDbRef.child(story.id).remove();
     }
+    toggleDeletionConfirm = () => this.setState({ deletionConfirm: !this.state.deletionConfirm })
     render() {
         const { selected, stories, onChange } = this.props;
+        const { deletionConfirm } = this.state;
         return (
             <div className="Stories">
                 <h2 className="Stories-Head">Stories</h2>
-			        <div style={{ margin: '20px 15px 5px' }}>
+			        <div style={{ margin: '20px 15px 0' }}>
                         <StoryForm
                             label="Add a new story"
                             buttonProps={{
@@ -49,9 +59,20 @@ export default class StoryList extends React.Component {
                                         <ButtonGroup>
                                             <Button
                                                 icon="trash"
-                                                onClick={() => this.deleteStory(story)}
+                                                onClick={this.toggleDeletionConfirm}
                                             />
                                         </ButtonGroup>
+                                        <Alert
+                                            cancelButtonText="Cancel"
+                                            confirmButtonText="Delete story"
+                                            icon="trash"
+                                            intent={Intent.DANGER}
+                                            isOpen={deletionConfirm}
+                                            onCancel={this.toggleDeletionConfirm}
+                                            onConfirm={() => {this.deleteStory(story); this.toggleDeletionConfirm()}}
+                                        >
+                                            <p>Are you sure to delete story?</p>
+                                        </Alert>
                                     </div>
                                 </div>
                             }

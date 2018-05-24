@@ -32,8 +32,8 @@ export class TaskList extends Component {
                             >
                                 {items.map((item, index) => (
                                     <Draggable
-                                        key={item.id}
-                                        draggableId={item.id}
+                                        key={`${id}-${item.id}`}
+                                        draggableId={`${id}-${item.id}`}
                                         index={index}>
                                         {(provided, snapshot) => (
                                             <div

@@ -48,7 +48,7 @@ class App extends Component {
                                     ...lists[key],
                                     // items object to array
                                     // and push id from object key
-                                    items: lists[key].items ? Object.entries(lists[key].items).map(i => ({id: i[0], ...i[1]})) : [],
+                                    items: lists[key].items ? Object.entries(lists[key].items).map(i => ({...i[1], id: i[0]})) : [],
                                 }
                                 return lists;
                             },
@@ -66,7 +66,7 @@ class App extends Component {
                 this.storiesDbRef
                     .on('value', snap => {
                         // normalize
-                        const stories = Object.entries(snap.val() || []).map(i => ({id: i[0], ...i[1]}));
+                        const stories = Object.entries(snap.val() || []).map(i => ({...i[1], id: i[0]}));
 
                         this.setState({
                             stories,
@@ -170,6 +170,7 @@ class App extends Component {
                             <div className="container">
                                 <Board
                                     unlockSave={this.unlockSave}
+                                    synchronize={this.synchronize}
                                     {...{fetching, stories, lists}}
                                 />
                             </div>

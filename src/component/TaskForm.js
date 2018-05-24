@@ -5,7 +5,7 @@ import {
 	Dialog,
 	Label, Button, TextArea, InputGroup, Switch,
 } from '@blueprintjs/core';
-import { DatePicker } from "@blueprintjs/datetime";
+import { DateTimePicker } from "@blueprintjs/datetime";
 
 const emptyForm = {
 	id: null,
@@ -19,7 +19,8 @@ const emptyForm = {
 export default class TaskForm extends Component {
 	constructor(props, context) {
 		super(props, context);
-		const form = props.form || this.getEmptyForm();
+		const form = this.getEmptyForm(props.form);
+		form.date = new Date(form.date);
 		this.state = {
 			dialog: false,
 			saving: false,
@@ -33,7 +34,7 @@ export default class TaskForm extends Component {
 			form: Object.assign(this.state.form, {...value})
 		});
 	}
-	getEmptyForm = () => Object.assign({story: this.props.story}, emptyForm);
+	getEmptyForm = form => Object.assign({story: this.props.story}, emptyForm, form || {});
 	save = () => {
 		const { form } = this.state;
 		this.setState({ saving: true });
@@ -102,7 +103,9 @@ export default class TaskForm extends Component {
 						/>
 					</Label>
 					<Label text="Date ended" style={{ display: 'inline-block' }}>
-						<DatePicker
+						<DateTimePicker
+							value={form.date}
+							timePickerProps={{ precision: "minutes" }}
 							className={Classes.ELEVATION_1}
 							showActionsBar={true}
 							onChange={date => this.updateFormValue({date})}

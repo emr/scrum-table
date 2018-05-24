@@ -5,6 +5,7 @@
 .TaskList-Head {
     position: -webkit-sticky;
     position: sticky;
+    z-index: 2;
     top: 0;
     padding: 20px;
     margin: 0;

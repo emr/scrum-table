@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import firebase from '../firebase';
+import moment from 'moment';
 import TaskForm from './TaskForm';
-import { Card, ButtonGroup, Button } from '@blueprintjs/core';
+import { Icon, Card, ButtonGroup, Button } from '@blueprintjs/core';
 import './Task.css';
 
 export default class Task extends Component {
@@ -9,7 +10,6 @@ export default class Task extends Component {
 		super(props, context);
 		this.state = {
 			deleting: false,
-			doneMarked: props.item.done,
 		}
         this.tasksDbRef = firebase.database().ref(`lists/${props.listId}/items`);
 	}
@@ -18,8 +18,8 @@ export default class Task extends Component {
 		this.tasksDbRef.child(this.props.item.id).remove();
 	}
 	toggleDoneMark = () => {
-		this.tasksDbRef.child(this.props.item.id).update({ done: !this.state.doneMarked });
-		this.setState({ doneMarked: !this.state.doneMarked });
+		this.props.item.done = !this.props.item.done;
+		this.forceUpdate();
 	}
 	render() {
 		const { item, listId } = this.props;
@@ -45,14 +45,26 @@ export default class Task extends Component {
 								loading={deleting}
 							/>
 							<Button
-								icon={doneMarked ? 'saved' : 'document'}
-								text={doneMarked ? 'Not done' : 'Done'}
+								icon={item.done ? 'saved' : 'document'}
+								text={item.done ? 'Not done' : 'Done'}
 								onClick={this.toggleDoneMark}
 							/>
 						</ButtonGroup>
 					</div>
 					<div className="Task-Title">{item.title}</div>
-					<div className="Task-Description">{item.content}</div>
+					<div className="Task-Description">{item.content.split('\n').map(c => <div>{c}</div>)}</div>
+					<div className="Task-Person">
+						<Icon icon="person" />
+						&nbsp;
+						&nbsp;
+						{item.person}
+					</div>
+					<div className="Task-Date">
+					    <Icon icon={item.done ? 'updated' : 'time'} />
+						&nbsp;
+						&nbsp;
+						{moment(item.date).endOf('hour').fromNow()}
+					</div>
 				</Card>
 			</div>
 		);
